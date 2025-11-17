@@ -1,0 +1,13 @@
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+quickbase.ipynb
+plans.ipynb
+.env
+_build
+.DS_Store
+*.html
+./issues_table.html
+addresses.csv
