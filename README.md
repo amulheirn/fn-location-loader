@@ -30,4 +30,4 @@ Alternatively, do a dry-run and look at the locations_payload.json file that is 
 ## Notes
 This software is supplied as-is and with no warranty or support.
 
-The software will not create a location if one of the same name still exists.# fn-location-loader
+The software will not create a location if one of the same name still exists.
