@@ -14,11 +14,12 @@ Both scripts require `.env` values: `FORWARD_API_BASE_URL`, `NETWORK_ID`, `API_K
 4. If you are using Forward Enterprise on-prem, change the base URL from fwd.app to your URL.
 
 ## Using the location loader
-1. Prepare `addresses.csv` (see `addresses-example.csv` for columns: `id,name,address,lat,lng`).  Lat and long are optional values but must be present..
+1. Prepare `addresses.csv` (see `addresses-example.csv` for columns: `id,name,address,lat,lng`).  Lat and long are optional values but the field must be present even if left empty.
 2. Run: `python fn-location-loader.py addresses.csv`
 
+The script will look up the address in OpenStreetmap and geocode it to a lat/long.  Then it will create the location with those coordinates in Forward's API.
 
-You can do a dry run  which makes no changes if you wan to check this. It writes a file called `locations_payload.json`).  Add the flag `--dry-run` before the CSV file.
+You can do a dry run if you want to check this. It writes a file called `locations_payload.json`).  Add the flag `--dry-run` when running the command.
 
 Increase verbosity using the log-level flag: `--log-level DEBUG`
 
