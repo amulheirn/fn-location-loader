@@ -1,33 +1,48 @@
-# FN Loation Loader
+# FN Location & Device Loader
 
 ## Overview
-This python script allows you to create a lot of new locations in Forward Enterprise using the API, saving quite a lot of time and effort.
+Two scripts are provided:
+- `fn-location-loader.py`: geocodes addresses (via OpenStreetMap) and creates locations in Forward Enterprise.
+- `fn-device-loader.py`: maps devices to the locations, and optionally applies device tags.
 
-It geo-codes the lat/long using the OpenStreetmap API, then creates the location in Forward Enterprise for you.
+Both scripts require `.env` values: `FORWARD_API_BASE_URL`, `NETWORK_ID`, `API_KEY_ID`, `API_SECRET`. Optional: `DRY_RUN`, `LOG_LEVEL`.
 
-## How to use
+## Setup
+1. Clone this repository.
+2. Copy `.env_example` to `.env`.
+3. Fill in your network ID, API key, and secret. 
+4. If you are using Forward Enterprise on-prem, change the base URL from fwd.app to your URL.
 
-Clone this repository
+## Using the location loader
+1. Prepare `addresses.csv` (see `addresses-example.csv` for columns: `id,name,address,lat,lng`).  Lat and long are optional values but must be present..
+2. Run: `python fn-location-loader.py addresses.csv`
 
-Copy .env_example to a new file called .env
 
-Enter your network ID, API Key and API Secret in the file.
+You can do a dry run  which makes no changes if you wan to check this. It writes a file called `locations_payload.json`).  Add the flag `--dry-run` before the CSV file.
 
-Create your addresses in an addresses.csv file (see the example for the fields needed)
+Increase verbosity using the log-level flag: `--log-level DEBUG`
 
-Run the script using `fn-location-locater.py addresses.csv`
+Notes: The script will not create a location if one of the same name already exists.
 
-## Debugging
+## Using the device loader
+1. Prepare `devices.csv` (see `devices-example.csv`) with columns:
+   - Required: `device`, `location`
+   - Optional: `tag` (single tag value which must be letters, numbers, `_`, `-`)
+2. Run: `python fn-device-loader.py devices.csv`
 
-If things are not working as you expect you can turn on a higher logging level using:
+Dry-run and debug log levels can be enabled as in the fn-location-loader 
 
-`fn-location-locater.py --log-level DEBUG addresses.csv`
+Behaviour:
+- Looks up all locations via `/api/networks/{NETWORK_ID}/locations` and matches by name (case-insensitive).
+- If any tag values are present, fetches existing tags via `/api/networks/{NETWORK_ID}/device-tags` and errors when a tag is missing.
+- Updates device locations via PATCH `/api/networks/{NETWORK_ID}/atlas`.
+- Adds device tags via POST `/api/networks/{NETWORK_ID}/device-tags?action=addBatchTo`.
 
-Alternatively, do a dry-run and look at the locations_payload.json file that is created.
+Color logging:
+- Errors are printed in orange.
+- Successful location PATCH lines and the final success line are printed in green.
 
-`fn-location-locater.py --dry-run addresses.csv`
 
-## Notes
-This software is supplied as-is and with no warranty or support.
+## Note
+This script is provided under the MIT license.  See `LICENSE` for details.
 
-The software will not create a location if one of the same name still exists.
