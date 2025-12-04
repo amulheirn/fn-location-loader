@@ -11,5 +11,6 @@ _build
 *.html
 ./issues_table.html
 addresses.csv
+devices.csv
 *.json
 *.log
