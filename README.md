@@ -1,4 +1,4 @@
-# FN Location & Device Loader
+# fn-location-loader and fn-device-loader
 
 ## Overview
 Two scripts are provided:
